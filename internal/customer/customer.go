@@ -54,7 +54,7 @@ func Customer(conf KafkaConf) {
 		go func(sarama.PartitionConsumer) {
 			defer wg.Done()
 			for msg := range pc.Messages() {
-				fmt.Printf("Partition:%d Offset:%d Key:%v Value:%v", msg.Partition, msg.Offset, msg.Key, msg.Value)
+				fmt.Println(msg.Partition, msg.Offset, msg.Key, string(msg.Value))
 			}
 		}(pc)
 	}
