@@ -1,22 +1,19 @@
-package main
+package producer
 
 import (
 	"flag"
 	"log"
-	"runtime"
+	"testing"
 
 	"github.com/robfig/config"
-	"github.com/zhenligod/customer/customer"
 )
 
 var (
-	configFile = flag.String("configfile", "conf/kafka.conf", "General configuration file")
+	configFile = flag.String("configfile", "../../conf/kafka.conf", "General configuration file")
 	conf       = make(map[string]string)
 )
 
-func init() {
-	cpuNum := runtime.NumCPU()
-	log.Println("current cpu nums: ", cpuNum)
+func TestCustomer(t *testing.T) {
 	cfg, err := config.ReadDefault(*configFile) //读取配置文件，并返回其Config
 
 	if err != nil {
@@ -34,13 +31,13 @@ func init() {
 		}
 	}
 	log.Println(conf)
-
-}
-
-func main() {
-	KafkaCustomerConf := customer.KafkaConf{}
-	KafkaCustomerConf.IP = conf["kafka_hostname"]
-	KafkaCustomerConf.Port = conf["kafka_port"]
-	KafkaCustomerConf.Topic = conf["kafka_topic"]
-	customer.Customer(KafkaCustomerConf)
+	KafkaProducerConf := KafkaConf{}
+	KafkaProducerConf.IP = conf["kafka_hostname"]
+	KafkaProducerConf.Port = conf["kafka_port"]
+	KafkaProducerConf.Topic = conf["kafka_topic"]
+	for i := 0; i < 10; i++ {
+		msg := "my kafka test"
+		Producer(KafkaProducerConf, msg)
+	}
+	t.Log("producer test ok!!!")
 }

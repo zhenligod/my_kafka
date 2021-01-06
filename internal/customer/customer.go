@@ -17,7 +17,7 @@ type KafkaConf struct {
 }
 
 // 消费者练习
-func customer(conf KafkaConf) {
+func Customer(conf KafkaConf) {
 	address := strings.Join([]string{
 		conf.IP,
 		conf.Port,
